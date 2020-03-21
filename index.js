@@ -7,7 +7,7 @@ const AWS = require('aws-sdk')
 
 const spinner = ora()
 
-// Enter copied or downloaded access ID and secret key here
+// AWS credentials
 const ID = process.env.AWS_ACCESS_ID
 const SECRET = process.env.AWS_ACCESS_SECRET
 
@@ -41,7 +41,7 @@ async function main () {
   try {
     await execa('npx', ['prisma', 'export', '--path', fileName])
   } catch (err) {
-    console.log('error', err)
+    console.log(err)
     spinner.fail()
   }
 
@@ -52,7 +52,7 @@ async function main () {
     const file = await uploadFile(fileName)
     spinner.succeed(`Database uploaded successfully. ${file.Location}`)
   } catch (err) {
-    console.log('error', err)
+    console.log(err)
     spinner.fail()
   }
 
