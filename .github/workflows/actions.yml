@@ -1,0 +1,24 @@
+name: 'GitHub Actions Bookis Prisma DB backup'
+
+on:
+  push:
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: 'Install node'
+        uses: actions/setup-node@v1
+      - name: 'Install NPM dependencies'
+        run: npm install
+      - name: 'Run code'
+        run: node index.js
+        env:
+          PRISMA_ENDPOINT: ${{ secrets.PRISMA_ENDPOINT }}
+          PRISMA_SECRET: ${{secrets.PRISMA_SECRET}}
+          AWS_ACCESS_ID: ${{ secrets.AWS_ACCESS_ID }}
+          AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
