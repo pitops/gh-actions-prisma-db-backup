@@ -39,9 +39,9 @@ async function main () {
 
   spinner.start('Exporting database')
   try {
-    await execa('prisma', ['export', '--path', fileName])
+    await execa('npx', ['prisma', 'export', '--path', fileName])
   } catch (err) {
-    console.log('error', err.message)
+    console.log('error', err)
     spinner.fail()
   }
 
@@ -52,7 +52,7 @@ async function main () {
     const file = await uploadFile(fileName)
     spinner.succeed(`Database uploaded successfully. ${file.Location}`)
   } catch (err) {
-    console.log('error', err.message)
+    console.log('error', err)
     spinner.fail()
   }
 
