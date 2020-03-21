@@ -38,12 +38,23 @@ async function main () {
   const fileName = `${new Date().toISOString()}.zip`
 
   spinner.start('Exporting database')
-  await execa('prisma', ['export', '--env-file', '.env', '--path', fileName])
+  try {
+    await execa('prisma', ['export', '--path', fileName])
+  } catch (err) {
+    console.log('error', err.message)
+    spinner.fail()
+  }
+
   spinner.succeed('Exported database')
 
   spinner.start('Uploading to S3 bucket')
-  const file = await uploadFile(fileName)
-  spinner.succeed(`Database uploaded successfully. ${file.Location}`)
+  try {
+    const file = await uploadFile(fileName)
+    spinner.succeed(`Database uploaded successfully. ${file.Location}`)
+  } catch (err) {
+    console.log('error', err.message)
+    spinner.fail()
+  }
 
   spinner.start('Cleaning up')
   await fse.removeSync(fileName)
